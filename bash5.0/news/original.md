@@ -1,4 +1,4 @@
-= +========== NEWS ==========+
+= bash 5.0 NEWS
 
 +========== NEWS ==========+
 This is a terse description of the new features added to bash-5.0 since
