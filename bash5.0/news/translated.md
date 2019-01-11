@@ -1,4 +1,4 @@
-= [Qiita] [日本語訳] bash-5.0 NEWS
+[Qiita] [日本語訳] bash-5.0 NEWS
 bash:5.0 和訳 新機能
 
 
