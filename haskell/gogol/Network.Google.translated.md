@@ -10,7 +10,7 @@
 このモジュールは、`Google`モナドとremote Google Service APIsに使える一般的な操作を提供します。
 使いたいサービスに必要な`gogol-*`ライブラリと併用してimportしてください。
 
-# $usage
+# usage
 
 `gogol-*`ライブラリ群で提供されるリクエストとレスポンスの型は、
 リクエストの目的に合わせて`send`, `upload`, `download`と組み合わせて使えます。
