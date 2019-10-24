@@ -68,3 +68,33 @@ Google App EngineとGoogle Compute Engineには、Gogolに[Application Default C
 他の例は[brendanhay/Gogol](https://github.com/brendanhay/gogol/tree/develop/examples)で見ることができます。
 
 
+# Authorization
+
+<?>特定の`runGoogle`の文脈内のリクエストは、与えられた認証情報の特定のOAuth2スコープを</?>
+例えば、Google Storageの`ObjectsInsert`は以下のスコープを持っています:
+```haskell
+> type Scopes ObjectsInsert =
+>      '["https://www.googleapis.com/auth/cloud-platform",
+>        "https://www.googleapis.com/auth/devstorage.full_control",
+>        "https://www.googleapis.com/auth/devstorage.read_write"]
+```
+
+一つの`runGoogle`の中にある複数の異なるリクエストは、それぞれのリクエストに必要なスコープの最小の集合である必要があります。
+この認証情報は`Google`と`MonadGoogle`の型パラメーターの`s`として、型レベルの集合として表されます。
+送信されたリクエストのスコープと`Env`の認証スコープの相違はコンパイルエラーになります。
+`allow`もしくは`envScopes`レンズを使うことで`Env`のスコープを指定することができます。
+様々な`gogol-*`ライブラリはそれぞれ個々のスコープを`Network.Google.*`からエキスポートしており、`(!)`コンビネーターを使ってより大きな集合にすることができます。
+例えば:
+```haskell
+> import Control.Lens ((<&>), (.~))
+> import Network.Google
+> import Network.Google.Monitoring
+>
+> main :: IO ()
+> main = do
+>     env <- newEnv <&> envScopes .~ (monitoringReadScope ! monitoringWriteScope ! computeReadOnlyScope)
+>     ...
+>>> :type env
+Env '["https://www.googleapis.com/auth/monitoring.read", "https://www.googleapis.com/auth/monitoring.write", "https://www.googleapis.com/auth/compute.readonly"]
+```
+
