@@ -120,3 +120,7 @@ Env '["https://www.googleapis.com/auth/monitoring.read", "https://www.googleapis
 * "Network.Google.Auth.ServiceAccount" - 改造された環境にデプロイされたアプリケーション
 * "Network.Google.Auth.ApplicationDefault" - App Engine (GAE)もしくはCompute Engine (GCE)上にデプロイされたアプリケーション
 詳しくは`Network.Google.Auth`を参照してください。
+
+
+# async
+リクエストは非同期的に送ることができますが、資源の保証のためにクロージャが[lifted-async](http://hackage.haskell.org/package/lifted-async)の使用を要求します。
