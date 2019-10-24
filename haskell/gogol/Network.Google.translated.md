@@ -48,3 +48,23 @@ Google App EngineとGoogle Compute Engineには、Gogolに[Application Default C
 >         upload (objectsInsert bkt object' & oiName ?~ key) body
 ```
 
+上記の例を説明するにあたって、以下のポイントを見ていきます:
+1. デフォルトの`noop logger`を置き換える新しい`Logger`が作成され、デバッグ情報とエラーの出力を`stdout`に設定します。
+2. `Env`は`newEnv`を使って作成されます。これは新しい`HTTP Manager`を作成し、アプリケーションのデフォルトの`Credentials`を取得します。
+3. `envLogger`と`envScopes`レンズは、それぞれ新しく作成された`Logger`とOAuth2 スコープを設定するのに使われます。
+   `Env`に対してスコープを明示的に指定することで、`runGoogle`で実行される`remote operation`とCredentialsのスコープの相違がコンパイルエラーとして検出されるようになります。
+  詳しくは[Authorization](#Authorization)を参照してください。
+4. オブジェクトに対するストリーミング`body`は`FilePath`から生成され、MIME typeはその拡張子から決定されます。
+   MIME typeはCloud Strageではオブジェクトの`Content-Type`として扱われ、`bodyContentType`レンズを以下のように使用することで上書きできます:
+```haskell
+    > import Network.HTTP.Media ((//))
+    >
+    > body <- sourceBody f <&> bodyContentType .~ "application" // "json"
+```
+5. 最終的に、`runResourceT . runGoogle`を使って`Google`モナドを走らせます。
+   これによって`ObjectsInsert`型をHTTPリクエストにシリアライズし、ストリーミングを`body`に設定します。
+   戻り値の`Object`メタデータはHTTPレスポンスからパースされます。
+
+他の例は[brendanhay/Gogol](https://github.com/brendanhay/gogol/tree/develop/examples)で見ることができます。
+
+
