@@ -98,3 +98,17 @@ Google App EngineとGoogle Compute Engineには、Gogolに[Application Default C
 Env '["https://www.googleapis.com/auth/monitoring.read", "https://www.googleapis.com/auth/monitoring.write", "https://www.googleapis.com/auth/compute.readonly"]
 ```
 
+# configuration
+各サービスは、ホスト・ポート・パスのプレフィックス・タイムアウト等、他のサービスとは切り離して設定可能な固有の設定を持っています。
+サーバーのエンドポイントをモックするときや、特定のリクエストに対するHTTPレスポンスのタイムアウトを調整する時に変更することが望ましいです。
+例えば、Google Computeへの全ての呼び出しを実際のエンドポイントの代わりに'https://localhost'に送りたい場合、`Control.Monad.Reader.local`を`override`とともに使うことができます:
+```haskell
+> import Control.Lens ((&), (.~))
+> import Control.Monad.Reader (local)
+> import Network.Google
+> import Network.Google.Compute
+>
+> local (override (computeService & serviceHost .~ "localhost")) $ do
+>    _ <- send $ instancesGet "project" "zone" "instance-id"
+>    ...
+```
