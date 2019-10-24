@@ -124,3 +124,8 @@ Env '["https://www.googleapis.com/auth/monitoring.read", "https://www.googleapis
 
 # async
 リクエストは非同期的に送ることができますが、資源の保証のためにクロージャが[lifted-async](http://hackage.haskell.org/package/lifted-async)の使用を要求します。
+
+
+# metadata
+Google ComputeのメタデータはGCEインスタンス上で動作している時に読み出すことだできます。
+使用可能な関数については`Network.Google.Compute.Metadata`内のドキュメントを参照してください。
