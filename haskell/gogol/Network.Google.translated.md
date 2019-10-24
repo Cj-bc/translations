@@ -112,3 +112,11 @@ Env '["https://www.googleapis.com/auth/monitoring.read", "https://www.googleapis
 >    _ <- send $ instancesGet "project" "zone" "instance-id"
 >    ...
 ```
+
+# Credentials
+デフォルトでは`newEnv`はGoogleの公式ライブラリの仕様と同様に、認証情報を探すために`getApplicationDefault`を使用します。
+もし`newEnvWith`越しに認証情報を手動で設定したい場合、以下の対応した認証情報メカニズムを使用することができます。
+* "Network.Google.Auth.InstalledApplication" - デバイスにインストールされているアプリケーション
+* "Network.Google.Auth.ServiceAccount" - 改造された環境にデプロイされたアプリケーション
+* "Network.Google.Auth.ApplicationDefault" - App Engine (GAE)もしくはCompute Engine (GCE)上にデプロイされたアプリケーション
+詳しくは`Network.Google.Auth`を参照してください。
